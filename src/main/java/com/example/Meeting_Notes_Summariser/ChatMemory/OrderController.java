@@ -37,7 +37,7 @@ public class OrderController {
         log.info("chat memory for user:{}",userId);
         chatMemory.get(userId).forEach(m->log.info("{}: {}",m.getMessageType(),m.getMetadata()));
 
-        String userMessage=message + "user-id:" + userId;
+        String userMessage=message + ". user-id:" + userId;
         return chatClient.prompt().tools(orderStatusTool).system(SYSTEM_PROMPT)
                 .user(u->u.text("User query: {userMessage}").param("userMessage", userMessage))
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, userId)).call().content();
