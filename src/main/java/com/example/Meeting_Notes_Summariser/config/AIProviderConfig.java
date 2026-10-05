@@ -4,8 +4,10 @@ import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +37,17 @@ public class AIProviderConfig {
         return ChatClient.builder(openAiChatModel)
                 .build();
     }
+    String conversationId = "user-123";
+    @Bean("openAIChatClientWithMemory")
+    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory) {
 
+        return ChatClient.builder(openAiChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+
+                .build();
+
+    }
 
 
 //    @Bean("huggingfaceChatClient")
