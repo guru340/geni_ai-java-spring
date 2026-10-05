@@ -9,6 +9,8 @@ spring:
       api-key: ${GROQ_API_KEY}
       base-url: ${GROQ_BASE_URL}
       chat:
+        extra-body:
+          reasoning_format: hidden
         model: ${GROQ_MODEL}
 
     huggingface:

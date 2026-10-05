@@ -37,13 +37,13 @@ public class AIProviderConfig {
         return ChatClient.builder(openAiChatModel)
                 .build();
     }
-    String conversationId = "user-123";
+
     @Bean("openAIChatClientWithMemory")
     ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory) {
 
         return ChatClient.builder(openAiChatModel)
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .defaultAdvisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+
 
                 .build();
 
