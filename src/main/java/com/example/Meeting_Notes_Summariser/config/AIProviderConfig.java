@@ -18,6 +18,13 @@ import java.util.List;
 
 @Configuration
 public class AIProviderConfig {
+    @Bean
+    ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
+        return MessageWindowChatMemory.builder()
+                .chatMemoryRepository(chatMemoryRepository)
+                .maxMessages(5)
+                .build();
+    }
 
     @Bean("openAIChatClient")
     ChatClient openAIchatClient(OpenAiChatModel openAiChatModel
@@ -49,13 +56,6 @@ public class AIProviderConfig {
 
                 .build();
 
-    }
-    @Bean
-    ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
-        return MessageWindowChatMemory.builder()
-                .chatMemoryRepository(chatMemoryRepository)
-                .maxMessages(10)
-                .build();
     }
 
 

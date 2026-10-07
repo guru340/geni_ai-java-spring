@@ -4,25 +4,27 @@ server:
 spring:
   application:
     name: Meeting_Notes_Summariser
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
+    username: postgres
+    password: postgres
+
   ai:
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+
     openai:
       api-key: ${GROQ_API_KEY}
       base-url: ${GROQ_BASE_URL}
       chat:
-        extra-body:
-          reasoning_format: hidden
         model: ${GROQ_MODEL}
+        temperature: 0.7
 
-    huggingface:
-      chat:
-        api-key: ${HUGGINGFACE_API_KEY}
-        url: https://router.huggingface.co/hf-inference
-        options:
-          model: Qwen/Qwen2.5-Coder-7B-Instruct
-          max-new-tokens: 1024
-          temperature: 0.7
 logging:
   level:
     root: INFO
     org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor: DEBUG
-
