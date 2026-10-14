@@ -16,7 +16,13 @@ spring:
         repository:
           jdbc:
             initialize-schema: always
-
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: hnsw
+        distance-type: cosine_distance
+        dimensions: 1024
+        max-document-batch-size: 10_000
     openai:
       api-key: ${GROQ_API_KEY}
       base-url: ${GROQ_BASE_URL}
