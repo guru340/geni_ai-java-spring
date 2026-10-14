@@ -3,6 +3,7 @@ package com.example.Meeting_Notes_Summariser.config;
 import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.embedding.EmbeddingModel;
 import com.pgvector.PGvector;
 import org.springframework.ai.chat.client.ChatClient;
@@ -16,17 +17,26 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
 @Configuration
 public class AIProviderConfig {
+
+    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
+    private Resource VectorStoreMemorySystemPrompt;
+
+    private static final int TOP_K=10;
+
+
     @Bean
     public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
-                                       @Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel){
+                                        EmbeddingModel embeddingModel){
         return PgVectorStore.builder(jdbcTemplate,
                 embeddingModel).initializeSchema(true).build();
 
@@ -66,7 +76,12 @@ public class AIProviderConfig {
     ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory,
                                           PgVectorStore pgVectorStore){
         return ChatClient.builder(openAiChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore).build())
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
+                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+
+                        .defaultTopK(TOP_K).build()
+                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
 
 
