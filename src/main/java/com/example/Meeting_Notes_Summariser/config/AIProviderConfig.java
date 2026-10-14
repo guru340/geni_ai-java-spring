@@ -4,6 +4,7 @@ import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
 import org.springframework.ai.embedding.EmbeddingModel;
 import com.pgvector.PGvector;
 import org.springframework.ai.chat.client.ChatClient;
@@ -28,11 +29,13 @@ import java.util.List;
 @Configuration
 public class AIProviderConfig {
 
-    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
+    @Value("classpath:/templates/vector-store-memory-system-prompt.st")
     private Resource VectorStoreMemorySystemPrompt;
 
     private static final int TOP_K=10;
 
+    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
+    private Resource promptChatMemorySystemPrompt;
 
     @Bean
     public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
@@ -76,11 +79,14 @@ public class AIProviderConfig {
     ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory,
                                           PgVectorStore pgVectorStore){
         return ChatClient.builder(openAiChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
-                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-
-                        .defaultTopK(TOP_K).build()
-                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+                                .defaultAdvisors(PromptChatMemoryAdvisor.builder(chatMemory)
+                        .systemPromptTemplate(new PromptTemplate(promptChatMemorySystemPrompt))
+                        .build())
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
+//                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//
+//                        .defaultTopK(TOP_K).build()
+//                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
 
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
 
