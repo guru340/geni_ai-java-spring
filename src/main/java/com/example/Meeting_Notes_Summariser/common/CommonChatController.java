@@ -7,11 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -24,11 +27,12 @@ public class CommonChatController {
                                 SimpleLoggerAdvisor simpleLoggerAdvisor) {
         this.chatClient = chatClient.mutate().defaultAdvisors(simpleLoggerAdvisor).build();
     }
-
+    String conversationId = UUID.randomUUID().toString();
     @PostMapping("")
     public ChatClientResponse generalChat(@RequestBody String message) {
         ChatClientResponse chatClientResponse = chatClient.prompt()
                 .user(message)
+                .advisors(a->a.param(ChatMemory.CONVERSATION_ID,conversationId))
                 .call()
                 .chatClientResponse();
         logTokenInfo(message, chatClientResponse);

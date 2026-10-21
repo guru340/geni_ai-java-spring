@@ -96,7 +96,10 @@ public class AIProviderConfig {
                 .build();
 
     }
-
+    @Bean("vertexAIChatClient")
+    ChatClient vertexAIChatClient(VertexAiGeminiChatModel vertexAiGeminiChatModel) {
+        return ChatClient.builder(vertexAiGeminiChatModel).build();
+    }
 
 //    @Bean("huggingfaceChatClient")
 //    ChatClient huggingfaceChatClient(HuggingfaceChatModel huggingfaceChatModel){
