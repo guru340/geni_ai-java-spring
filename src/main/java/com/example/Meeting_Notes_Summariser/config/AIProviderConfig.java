@@ -6,45 +6,48 @@ import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
 import org.springframework.ai.embedding.EmbeddingModel;
-import com.pgvector.PGvector;
+
+
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.core.JdbcTemplate;
+
 
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class AIProviderConfig {
 
-    @Value("classpath:/templates/vector-store-memory-system-prompt.st")
-    private Resource VectorStoreMemorySystemPrompt;
+//    @Value("classpath:/templates/vector-store-memory-system-prompt.st")
+//    private Resource VectorStoreMemorySystemPrompt;
+//
+//    private static final int TOP_K=10;
+//
+//    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
+//    private Resource promptChatMemorySystemPrompt;
+//
+//    @Bean
+//    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
+//                                        EmbeddingModel embeddingModel){
+//        return PgVectorStore.builder(jdbcTemplate,
+//                embeddingModel).initializeSchema(true).build();
+//
+//
+//    }
 
-    private static final int TOP_K=10;
-
-    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
-    private Resource promptChatMemorySystemPrompt;
-
-    @Bean
-    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
-                                        EmbeddingModel embeddingModel){
-        return PgVectorStore.builder(jdbcTemplate,
-                embeddingModel).initializeSchema(true).build();
-
-
-    }
 
     @Bean
     ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
@@ -76,8 +79,8 @@ public class AIProviderConfig {
     }
 
     @Bean("openAIChatClientWithMemory")
-    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory,
-                                          PgVectorStore pgVectorStore){
+    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory
+                                        ){
         return ChatClient.builder(openAiChatModel)
 
 
@@ -87,7 +90,7 @@ public class AIProviderConfig {
 //                        .defaultTopK(TOP_K).build()
 //                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
 
-//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
 
 
                 .build();

@@ -1,1 +1,1 @@
-TRUNCATE TABLE spring_ai_chat_memory;
+-- TRUNCATE TABLE spring_ai_chat_memory;
