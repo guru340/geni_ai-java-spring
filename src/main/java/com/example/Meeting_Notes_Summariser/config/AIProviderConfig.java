@@ -81,11 +81,11 @@ public class AIProviderConfig {
         return ChatClient.builder(openAiChatModel)
 
 
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
-                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-
-                        .defaultTopK(TOP_K).build()
-                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
+//                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//
+//                        .defaultTopK(TOP_K).build()
+//                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
 
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
 

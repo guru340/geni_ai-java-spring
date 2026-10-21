@@ -5,24 +5,24 @@ spring:
   application:
     name: Meeting_Notes_Summariser
 
-  datasource:
-    url: jdbc:postgresql://localhost:5433/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
-    username: postgres
-    password: postgres
+#  datasource:
+#    url: jdbc:postgresql://localhost:5433/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
+#    username: postgres
+#    password: postgres
 
   ai:
-    chat:
-      memory:
-        repository:
-          jdbc:
-            initialize-schema: always
-    vectorstore:
-      pgvector:
-        initialize-schema: true
-        index-type: hnsw
-        distance-type: cosine_distance
-        dimensions: 1024
-        max-document-batch-size: 10_000
+#    chat:
+#      memory:
+#        repository:
+#          jdbc:
+#            initialize-schema: always
+#    vectorstore:
+#      pgvector:
+#        initialize-schema: true
+#        index-type: hnsw
+#        distance-type: cosine_distance
+#        dimensions: 1024
+#        max-document-batch-size: 10_000
     openai:
       api-key: ${GROQ_API_KEY}
       base-url: ${GROQ_BASE_URL}
