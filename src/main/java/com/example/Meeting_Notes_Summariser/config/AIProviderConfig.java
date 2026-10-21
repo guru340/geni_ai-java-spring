@@ -79,14 +79,13 @@ public class AIProviderConfig {
     ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory,
                                           PgVectorStore pgVectorStore){
         return ChatClient.builder(openAiChatModel)
-                                .defaultAdvisors(PromptChatMemoryAdvisor.builder(chatMemory)
-                        .systemPromptTemplate(new PromptTemplate(promptChatMemorySystemPrompt))
-                        .build())
-//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
-//                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-//
-//                        .defaultTopK(TOP_K).build()
-//                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+
+
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
+                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+
+                        .defaultTopK(TOP_K).build()
+                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
 
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
 
