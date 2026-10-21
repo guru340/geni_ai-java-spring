@@ -23,7 +23,7 @@ public class CommonChatController {
 
     private final ChatClient chatClient;
 
-    public CommonChatController(@Qualifier("openAIChatClientWithMemory") ChatClient chatClient,
+    public CommonChatController(@Qualifier("googlegenAIChatClientWithMemory") ChatClient chatClient,
                                 SimpleLoggerAdvisor simpleLoggerAdvisor) {
         this.chatClient = chatClient.mutate().defaultAdvisors(simpleLoggerAdvisor).build();
     }

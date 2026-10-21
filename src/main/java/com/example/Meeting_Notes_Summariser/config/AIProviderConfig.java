@@ -16,6 +16,8 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.google.genai.GoogleGenAiChatModel;
+import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,9 +98,11 @@ public class AIProviderConfig {
                 .build();
 
     }
-    @Bean("vertexAIChatClient")
-    ChatClient vertexAIChatClient(VertexAiGeminiChatModel vertexAiGeminiChatModel) {
-        return ChatClient.builder(vertexAiGeminiChatModel).build();
+    @Bean("googlegenAIChatClientWithMemory")
+    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory) {
+        return ChatClient.builder(vertexAiGeminiChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                        .build();
     }
 
 //    @Bean("huggingfaceChatClient")
