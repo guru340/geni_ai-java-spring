@@ -25,7 +25,7 @@ public class OrderController {
             "- Keep responses short, clear, and customer-friendly. Respond by naming the customer and asking for further helps.";
 
 
-    public OrderController(@Qualifier("googlegenAIChatClientWithMemory") ChatClient chatClient, OrderStatusTool orderStatusTool, ChatMemory chatMemory) {
+    public OrderController(@Qualifier("ollamaAiChatWithMemory") ChatClient chatClient, OrderStatusTool orderStatusTool, ChatMemory chatMemory) {
         this.chatClient = chatClient;
         this.orderStatusTool = orderStatusTool;
         this.chatMemory = chatMemory;

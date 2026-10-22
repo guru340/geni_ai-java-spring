@@ -19,6 +19,7 @@ import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -40,16 +42,16 @@ public class AIProviderConfig {
     private Resource VectorStoreMemorySystemPrompt;
 //
     private static final int TOP_K=10;
-//
-//    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
-//    private Resource promptChatMemorySystemPrompt;
-//
+
+    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
+    private Resource promptChatMemorySystemPrompt;
+
     @Bean
     public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
-                                      EmbeddingModel embeddingModel){
+                                     @Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel){
         return PgVectorStore.builder(jdbcTemplate,
                 embeddingModel)
-                .dimensions(768).initializeSchema(true).build();
+                .dimensions(1024).initializeSchema(true).build();
 
 
     }
@@ -70,7 +72,7 @@ public class AIProviderConfig {
 
         return ChatClient.builder(openAiChatModel).defaultAdvisors(safeGuardAdvisor,simpleLoggerAdvisor, errorWrappingAdvisor,systemPromptAdvisior,validationAdvisor).build();
     }
-
+//
 //    @Bean("openAIGeneralChatClient")
 //    ChatClient openAIGeneralchatClient(OpenAiChatModel openAiChatModel, BookingTools bookingTools){
 //
@@ -109,6 +111,15 @@ public class AIProviderConfig {
                         .defaultTopK(TOP_K).build())
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                         .build();
+    }
+    @Bean("ollamaAiChatWithMemory")
+    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
+        return ChatClient.builder(ollamaChatModel)
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+                        .defaultTopK(TOP_K)
+                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
+//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
     }
 
 //    @Bean("huggingfaceChatClient")
