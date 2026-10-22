@@ -34,7 +34,7 @@ spring:
         api-key: ${GEMINI_API_KEY}
 
         chat:
-          model: gemma-4-31b-it # gemini-3.8-flash
+          model: gemini-3.1-flash-lite #gemma-4-31b-it # gemini-3.8-flash
           temperature: 0.7
 
 logging:

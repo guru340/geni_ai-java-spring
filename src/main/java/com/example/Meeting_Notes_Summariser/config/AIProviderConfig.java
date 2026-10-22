@@ -55,7 +55,7 @@ public class AIProviderConfig {
     ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
         return MessageWindowChatMemory.builder()
                 .chatMemoryRepository(chatMemoryRepository)
-                .maxMessages(5)
+                .maxMessages(3)
                 .build();
     }
 
@@ -101,6 +101,7 @@ public class AIProviderConfig {
     @Bean("googlegenAIChatClientWithMemory")
     ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory) {
         return ChatClient.builder(vertexAiGeminiChatModel)
+
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                         .build();
     }
