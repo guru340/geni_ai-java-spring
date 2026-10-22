@@ -5,10 +5,10 @@ spring:
   application:
     name: Meeting_Notes_Summariser
 
-#  datasource:
-#    url: jdbc:postgresql://localhost:5433/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
-#    username: postgres
-#    password: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres?currentSchema=public&binaryTransfer=true&reWriteBatchedInserts=true&stringtype=unspecified
+    username: postgres
+    password: postgres
 
   ai:
 #    chat:
