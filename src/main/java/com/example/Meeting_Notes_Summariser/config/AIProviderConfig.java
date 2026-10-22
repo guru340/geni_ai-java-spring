@@ -3,6 +3,7 @@ package com.example.Meeting_Notes_Summariser.config;
 import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -20,11 +21,13 @@ import org.springframework.ai.google.genai.GoogleGenAiChatModel;
 import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 
 import java.util.List;
@@ -33,22 +36,23 @@ import java.util.UUID;
 @Configuration
 public class AIProviderConfig {
 
-//    @Value("classpath:/templates/vector-store-memory-system-prompt.st")
-//    private Resource VectorStoreMemorySystemPrompt;
+    @Value("classpath:/templates/vector-store-memory-system-prompt.st")
+    private Resource VectorStoreMemorySystemPrompt;
 //
-//    private static final int TOP_K=10;
+    private static final int TOP_K=10;
 //
 //    @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
 //    private Resource promptChatMemorySystemPrompt;
 //
-//    @Bean
-//    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
-//                                        EmbeddingModel embeddingModel){
-//        return PgVectorStore.builder(jdbcTemplate,
-//                embeddingModel).initializeSchema(true).build();
-//
-//
-//    }
+    @Bean
+    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
+                                      EmbeddingModel embeddingModel){
+        return PgVectorStore.builder(jdbcTemplate,
+                embeddingModel)
+                .dimensions(768).initializeSchema(true).build();
+
+
+    }
 
 
     @Bean
@@ -99,10 +103,11 @@ public class AIProviderConfig {
 
     }
     @Bean("googlegenAIChatClientWithMemory")
-    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory) {
+    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
         return ChatClient.builder(vertexAiGeminiChatModel)
-
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+                        .defaultTopK(TOP_K).build())
+//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                         .build();
     }
 

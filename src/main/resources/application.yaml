@@ -11,18 +11,18 @@ spring:
     password: postgres
 
   ai:
-#    chat:
-#      memory:
-#        repository:
-#          jdbc:
-#            initialize-schema: always
-#    vectorstore:
-#      pgvector:
-#        initialize-schema: true
-#        index-type: hnsw
-#        distance-type: cosine_distance
-#        dimensions: 1024
-#        max-document-batch-size: 10_000
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: hnsw
+        distance-type: cosine_distance
+        dimensions: 1024
+        max-document-batch-size: 10_000
     openai:
       api-key: ${GROQ_API_KEY}
       base-url: ${GROQ_BASE_URL}
@@ -32,10 +32,13 @@ spring:
     google:
       genai:
         api-key: ${GEMINI_API_KEY}
+        embedding:
+          text:
+            model: gemini-embedding-001
+#        chat:
+#          model: gemini-3.1-flash-lite #gemma-4-31b-it # gemini-3.8-flash
+#          temperature: 0.7
 
-        chat:
-          model: gemini-3.1-flash-lite #gemma-4-31b-it # gemini-3.8-flash
-          temperature: 0.7
 
 logging:
   level:
