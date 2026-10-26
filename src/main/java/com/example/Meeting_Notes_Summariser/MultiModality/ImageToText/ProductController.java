@@ -2,6 +2,7 @@ package com.example.Meeting_Notes_Summariser.MultiModality.ImageToText;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class ProductController {
                 "When a user uploads a product image and description, analyze both to identify any potential compliance issues such as inappropriate content, misleading information, or violations of intellectual property rights." +
                "Provide clear feedback on whether the product is compliant or not, and if not, specify the reasons for non-compliance and suggest necessary changes.";
 
-    public ProductController(ChatClient chatClient) {
+    public ProductController(@Qualifier("openAIGeneralChatClient") ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
