@@ -80,7 +80,7 @@ public class AIProviderConfig {
 //                .defaultTools(bookingTools).build();
 //    }
     @Bean("openAIGeneralChatClient")
-    ChatClient openAIGeneralchatClient(OpenAiChatModel openAiChatModel){
+    ChatClient openAIGeneralchatClient(GoogleGenAiChatModel openAiChatModel){
 
         return ChatClient.builder(openAiChatModel)
                 .build();
@@ -112,15 +112,15 @@ public class AIProviderConfig {
 //                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                         .build();
     }
-    @Bean("ollamaAiChatWithMemory")
-    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
-        return ChatClient.builder(ollamaChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-                        .defaultTopK(TOP_K)
-                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
-//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .build();
-    }
+//    @Bean("ollamaAiChatWithMemory")
+//    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
+//        return ChatClient.builder(ollamaChatModel)
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//                        .defaultTopK(TOP_K)
+//                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
+////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//                .build();
+//    }
 
 //    @Bean("huggingfaceChatClient")
 //    ChatClient huggingfaceChatClient(HuggingfaceChatModel huggingfaceChatModel){
