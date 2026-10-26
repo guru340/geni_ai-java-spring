@@ -3,6 +3,7 @@ package com.example.Meeting_Notes_Summariser.config;
 import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
+import com.google.genai.Client;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
@@ -80,11 +81,14 @@ public class AIProviderConfig {
 //                .defaultTools(bookingTools).build();
 //    }
     @Bean("openAIGeneralChatClient")
-    ChatClient openAIGeneralchatClient(GoogleGenAiChatModel openAiChatModel){
+    ChatClient openAIGeneralchatClient(GoogleGenAiChatModel googleGenAiChatModel){
 
-        return ChatClient.builder(openAiChatModel)
+        return ChatClient.builder(googleGenAiChatModel)
                 .build();
     }
+
+
+
 
     @Bean("openAIChatClientWithMemory")
     ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory
@@ -104,14 +108,14 @@ public class AIProviderConfig {
                 .build();
 
     }
-    @Bean("googlegenAIChatClientWithMemory")
-    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
-        return ChatClient.builder(vertexAiGeminiChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-                        .defaultTopK(TOP_K).build())
-//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                        .build();
-    }
+//    @Bean("googlegenAIChatClientWithMemory")
+//    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
+//        return ChatClient.builder(vertexAiGeminiChatModel)
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//                        .defaultTopK(TOP_K).build())
+////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//                        .build();
+//    }
 //    @Bean("ollamaAiChatWithMemory")
 //    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
 //        return ChatClient.builder(ollamaChatModel)

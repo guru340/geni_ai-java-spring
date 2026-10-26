@@ -1,58 +1,58 @@
-package com.example.Meeting_Notes_Summariser.common;
-
-import com.knuddels.jtokkit.Encodings;
-import com.knuddels.jtokkit.api.Encoding;
-import com.knuddels.jtokkit.api.EncodingRegistry;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ChatClientResponse;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
-
-@Slf4j
-@RestController
-@RequestMapping("/api/common/chat")
-public class CommonChatController {
-
-    private final ChatClient chatClient;
-
-    public CommonChatController(@Qualifier("googlegenAIChatClientWithMemory") ChatClient chatClient,
-                                SimpleLoggerAdvisor simpleLoggerAdvisor) {
-        this.chatClient = chatClient.mutate().defaultAdvisors(simpleLoggerAdvisor).build();
-    }
-    String conversationId = UUID.randomUUID().toString();
-    @PostMapping("")
-    public ChatClientResponse generalChat(@RequestBody String message) {
-        ChatClientResponse chatClientResponse = chatClient.prompt()
-                .user(message)
-                .advisors(a->a.param(ChatMemory.CONVERSATION_ID,conversationId))
-                .call()
-                .chatClientResponse();
-        logTokenInfo(message, chatClientResponse);
-        return chatClientResponse;
-    }
-
-    private void logTokenInfo(String message, ChatClientResponse chatClientResponse) {
-        EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
-        Encoding encoding = registry.getEncodingForModel(chatClientResponse.chatResponse().getMetadata().getModel()).orElse(null);
-
-        if (encoding == null) {
-            log.warn("Encoding not found for model: {}", chatClientResponse.chatResponse().getMetadata().getModel());
-            return;
-        }
-
-        int inputTokenNumber = encoding.countTokens(message);
-        log.info("Input token number: " + inputTokenNumber);
-
-        int outputTokenNumber = encoding.countTokens(chatClientResponse.chatResponse().getResult().getOutput().getText());
-        log.info("Output token number: " + outputTokenNumber);
-    }
-
-}
+//package com.example.Meeting_Notes_Summariser.common;
+//
+//import com.knuddels.jtokkit.Encodings;
+//import com.knuddels.jtokkit.api.Encoding;
+//import com.knuddels.jtokkit.api.EncodingRegistry;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.ai.chat.client.ChatClient;
+//import org.springframework.ai.chat.client.ChatClientResponse;
+//import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+//import org.springframework.ai.chat.memory.ChatMemory;
+//import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RestController;
+//
+//import java.util.UUID;
+//
+//@Slf4j
+//@RestController
+//@RequestMapping("/api/common/chat")
+//public class CommonChatController {
+//
+//    private final ChatClient chatClient;
+//
+//    public CommonChatController(@Qualifier("googlegenAIChatClientWithMemory") ChatClient chatClient,
+//                                SimpleLoggerAdvisor simpleLoggerAdvisor) {
+//        this.chatClient = chatClient.mutate().defaultAdvisors(simpleLoggerAdvisor).build();
+//    }
+//    String conversationId = UUID.randomUUID().toString();
+//    @PostMapping("")
+//    public ChatClientResponse generalChat(@RequestBody String message) {
+//        ChatClientResponse chatClientResponse = chatClient.prompt()
+//                .user(message)
+//                .advisors(a->a.param(ChatMemory.CONVERSATION_ID,conversationId))
+//                .call()
+//                .chatClientResponse();
+//        logTokenInfo(message, chatClientResponse);
+//        return chatClientResponse;
+//    }
+//
+//    private void logTokenInfo(String message, ChatClientResponse chatClientResponse) {
+//        EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
+//        Encoding encoding = registry.getEncodingForModel(chatClientResponse.chatResponse().getMetadata().getModel()).orElse(null);
+//
+//        if (encoding == null) {
+//            log.warn("Encoding not found for model: {}", chatClientResponse.chatResponse().getMetadata().getModel());
+//            return;
+//        }
+//
+//        int inputTokenNumber = encoding.countTokens(message);
+//        log.info("Input token number: " + inputTokenNumber);
+//
+//        int outputTokenNumber = encoding.countTokens(chatClientResponse.chatResponse().getResult().getOutput().getText());
+//        log.info("Output token number: " + outputTokenNumber);
+//    }
+//
+//}
