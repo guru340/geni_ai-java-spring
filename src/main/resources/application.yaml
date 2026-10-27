@@ -48,9 +48,10 @@ spring:
           temperature: 0.7f
           language: en
         speech:
-          model: tts-1
-          response-format: MP3
+          model: canopylabs/orpheus-v1-english
+          response-format: wav
           speed: 1.0
+          voice: austin
 
     google:
       genai:

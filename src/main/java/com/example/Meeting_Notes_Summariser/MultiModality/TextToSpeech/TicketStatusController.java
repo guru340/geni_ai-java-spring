@@ -63,8 +63,8 @@ public class TicketStatusController {
         log.info("Returning audio file with size: {}", audioBytes.length);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ticket-status.mp3\"")
+                .header(HttpHeaders.CONTENT_TYPE, "audio/wav")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ticket-status.wav\"")
                 .body(audioBytes);
 
     }
