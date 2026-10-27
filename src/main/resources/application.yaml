@@ -47,7 +47,10 @@ spring:
           model: whisper-large-v3-turbo
           temperature: 0.7f
           language: en
-
+        speech:
+          model: tts-1
+          response-format: MP3
+          speed: 1.0
 
     google:
       genai:
