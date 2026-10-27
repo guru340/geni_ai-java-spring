@@ -16,8 +16,9 @@ spring:
     password: postgres
 
   ai:
-#    model:
-#      chat: google-genai
+    model:
+      image: huggingface
+    #      chat: google-genai
 #      embedding: ollama
 
 
@@ -53,12 +54,17 @@ spring:
           speed: 1.0
           voice: austin
 
+
     google:
       genai:
         api-key: ${GEMINI_API_KEY}
         chat:
           model: gemini-3.1-flash-lite   # alternatives: gemma-4-31b-it, gemini-3.8-flash
           temperature: 0.7
+        image:
+          model: gemini-3.1-flash-lite-image
+          aspect-ratio: 1:1
+
 
 
 
@@ -67,6 +73,8 @@ spring:
 #      embedding:
 #        options:
 #          model: mxbai-embed-large
+
+
 
 logging:
   level:
