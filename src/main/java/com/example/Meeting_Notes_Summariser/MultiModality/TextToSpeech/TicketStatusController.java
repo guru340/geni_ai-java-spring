@@ -9,6 +9,7 @@ import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class TicketStatusController {
         this.textToSpeechModel = textToSpeechModel;
     }
 
-    @PostMapping("/status")
+    @PostMapping(value = "/status" , produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> getTicketStatus(@RequestBody String message, @RequestHeader(value="user-id") String userId){
         log.info("Received ticket status request with message: {}, for user {}",message,userId);
 
