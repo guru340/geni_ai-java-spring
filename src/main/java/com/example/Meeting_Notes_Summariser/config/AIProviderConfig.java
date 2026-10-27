@@ -90,24 +90,24 @@ public class AIProviderConfig {
 
 
 
-    @Bean("openAIChatClientWithMemory")
-    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory
-                                        ){
-        return ChatClient.builder(openAiChatModel)
-
-
-//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
-//                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//    @Bean("openAIChatClientWithMemory")
+//    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory
+//                                        ){
+//        return ChatClient.builder(openAiChatModel)
 //
-//                        .defaultTopK(TOP_K).build()
-//                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+//
+////                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
+////                        .systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+////
+////                        .defaultTopK(TOP_K).build()
+////                ,MessageChatMemoryAdvisor.builder(chatMemory).build())
+//
+//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//
+//
+//                .build();
 
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-
-
-                .build();
-
-    }
+//    }
 //    @Bean("googlegenAIChatClientWithMemory")
 //    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
 //        return ChatClient.builder(vertexAiGeminiChatModel)
