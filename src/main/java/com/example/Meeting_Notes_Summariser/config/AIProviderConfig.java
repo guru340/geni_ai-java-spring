@@ -80,12 +80,12 @@ public class AIProviderConfig {
 //        return ChatClient.builder(openAiChatModel)
 //                .defaultTools(bookingTools).build();
 //    }
-//        @Bean("openAIGeneralChatClient")
-//    ChatClient openAIGeneralchatClient(GoogleGenAiChatModel googleGenAiChatModel){
-//
-//        return ChatClient.builder(googleGenAiChatModel)
-//                .build();
-//    }
+        @Bean("openAIGeneralChatClient")
+    ChatClient openAIGeneralchatClient(GoogleGenAiChatModel googleGenAiChatModel){
+
+        return ChatClient.builder(googleGenAiChatModel)
+                .build();
+    }
 
 
 
