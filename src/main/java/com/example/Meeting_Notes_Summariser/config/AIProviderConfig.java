@@ -57,6 +57,10 @@ public class AIProviderConfig {
 
     }
 
+    @Bean("OllamaChatClient")
+    ChatClient ollamaChatclient(OllamaChatModel ollamaChatModel){
+        return ChatClient.builder(ollamaChatModel).build();
+    }
 
     @Bean
     ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
@@ -93,7 +97,7 @@ public class AIProviderConfig {
 //    @Bean("openAIChatClientWithMemory")
 //    ChatClient openAIChatClientWithMemory(OpenAiChatModel openAiChatModel, ChatMemory chatMemory
 //                                        ){
-//        return ChatClient.builder(openAiChatModel)
+//        return ChatCliento.builder(openAiChatModel)
 //
 //
 ////                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore)
