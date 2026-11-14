@@ -57,7 +57,7 @@ public class AIProviderConfig {
 
     }
 
-    @Bean("OllamaChatClient")
+    @Bean("ollamaChatClient")
     ChatClient ollamaChatclient(OllamaChatModel ollamaChatModel){
         return ChatClient.builder(ollamaChatModel).build();
     }

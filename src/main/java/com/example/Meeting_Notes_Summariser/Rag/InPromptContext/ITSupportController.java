@@ -1,6 +1,7 @@
 package com.example.Meeting_Notes_Summariser.Rag.InPromptContext;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class ITSupportController {
             "- Phone: +1 555-123-1000  \n" +
             "{message}";
 
-    public ITSupportController(ChatClient chatClient) {
+    public ITSupportController(@Qualifier("ollamaChatClient") ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
