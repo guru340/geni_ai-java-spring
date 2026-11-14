@@ -76,6 +76,7 @@ spring:
       chat:
         options:
           model: mistral:7b
+          num-ctx: 2048
           temperature: 0.7
           num-predict: 512
 
