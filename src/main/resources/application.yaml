@@ -4,7 +4,7 @@ server:
 
 app:
   ai:
-    provider: ollama
+    provider: google-genai
   rag:
     force-rebuild: true
     top-k: 4
