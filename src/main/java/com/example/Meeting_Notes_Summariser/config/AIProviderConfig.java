@@ -1,9 +1,11 @@
 package com.example.Meeting_Notes_Summariser.config;
 
+import com.example.Meeting_Notes_Summariser.Rag.config.data.RagConfigData;
 import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
 import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
 import com.google.genai.Client;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
@@ -23,6 +25,8 @@ import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +57,21 @@ public class AIProviderConfig {
         return PgVectorStore.builder(jdbcTemplate,
                 embeddingModel)
                 .dimensions(1024).initializeSchema(true).build();
+
+
+
+    }
+
+    @Bean("genAIRAGChatClient")
+    ChatClient genAIRAGChatClient(GoogleGenAiChatModel googleGenAiChatModel,
+                                  SimpleVectorStore simpleVectorStore,
+                                  SimpleLoggerAdvisor simpleLoggerAdvisor,
+                                  RagConfigData ragConfigData){
+        return ChatClient.builder(googleGenAiChatModel)
+                .defaultAdvisors(QuestionAnswerAdvisor.builder(simpleVectorStore)
+                        .searchRequest(SearchRequest.builder().topK(ragConfigData.getTopK())
+                                .similarityThreshold(ragConfigData.getSimilarityThreshold())
+                                .build()).build(),simpleLoggerAdvisor).build();
 
 
     }
