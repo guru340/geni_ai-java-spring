@@ -57,10 +57,10 @@ public class AIProviderConfig {
 
     }
 
-    @Bean("ollamaChatClient")
-    ChatClient ollamaChatclient(OllamaChatModel ollamaChatModel){
-        return ChatClient.builder(ollamaChatModel).build();
-    }
+//    @Bean("ollamaChatClient")
+//    ChatClient ollamaChatclient(OllamaChatModel ollamaChatModel){
+//        return ChatClient.builder(ollamaChatModel).build();
+//    }
 
     @Bean
     ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
@@ -70,13 +70,13 @@ public class AIProviderConfig {
                 .build();
     }
 
-    @Bean("openAIChatClient")
-    ChatClient openAIchatClient(OpenAiChatModel openAiChatModel
-    , SimpleLoggerAdvisor simpleLoggerAdvisor, SafeGuardAdvisor safeGuardAdvisor, errorWrappingAdvisor errorWrappingAdvisor,
-                                systemPromptAdvisor systemPromptAdvisior, ValidationAdvisor validationAdvisor){
-
-        return ChatClient.builder(openAiChatModel).defaultAdvisors(safeGuardAdvisor,simpleLoggerAdvisor, errorWrappingAdvisor,systemPromptAdvisior,validationAdvisor).build();
-    }
+//    @Bean("openAIChatClient")
+//    ChatClient openAIchatClient(OpenAiChatModel openAiChatModel
+//    , SimpleLoggerAdvisor simpleLoggerAdvisor, SafeGuardAdvisor safeGuardAdvisor, errorWrappingAdvisor errorWrappingAdvisor,
+//                                systemPromptAdvisor systemPromptAdvisior, ValidationAdvisor validationAdvisor){
+//
+//        return ChatClient.builder(openAiChatModel).defaultAdvisors(safeGuardAdvisor,simpleLoggerAdvisor, errorWrappingAdvisor,systemPromptAdvisior,validationAdvisor).build();
+//    }
 //
 //    @Bean("openAIGeneralChatClient")
 //    ChatClient openAIGeneralchatClient(OpenAiChatModel openAiChatModel, BookingTools bookingTools){
@@ -112,23 +112,23 @@ public class AIProviderConfig {
 //                .build();
 
 //    }
-//    @Bean("googlegenAIChatClientWithMemory")
-//    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
-//        return ChatClient.builder(vertexAiGeminiChatModel)
-//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-//                        .defaultTopK(TOP_K).build())
-////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-//                        .build();
-//    }
-//    @Bean("ollamaAiChatWithMemory")
-//    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
-//        return ChatClient.builder(ollamaChatModel)
-//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-//                        .defaultTopK(TOP_K)
-//                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
-////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-//                .build();
-//    }
+    @Bean("googlegenAIChatClientWithMemory")
+    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
+        return ChatClient.builder(vertexAiGeminiChatModel)
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+                        .defaultTopK(TOP_K).build())
+//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                        .build();
+    }
+    @Bean("ollamaAiChatWithMemory")
+    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
+        return ChatClient.builder(ollamaChatModel)
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+                        .defaultTopK(TOP_K)
+                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
+//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
+    }
 
 //    @Bean("huggingfaceChatClient")
 //    ChatClient huggingfaceChatClient(HuggingfaceChatModel huggingfaceChatModel){

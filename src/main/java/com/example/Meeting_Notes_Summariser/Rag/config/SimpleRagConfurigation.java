@@ -37,7 +37,7 @@ public class SimpleRagConfurigation {
     }
 
     @Bean
-    public SimpleVectorStore simpleVectorStore(@Qualifier("ollamaAiChatWithMemory") EmbeddingModel embeddingModel,
+    public SimpleVectorStore simpleVectorStore(@Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel,
                                                 TokenTextSplitter tokenTextSplitter,
                                                 RagConfigData ragConfigData) throws Exception {
 

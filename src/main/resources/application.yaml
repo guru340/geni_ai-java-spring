@@ -37,10 +37,10 @@ spring:
     password: postgres
 
   ai:
-#    model:
+    model:
 #      image: google-genai
-    #      chat: google-genai
-#      embedding: ollama
+          chat: google-genai
+          embedding: ollama
 
 
     chat:
@@ -80,7 +80,7 @@ spring:
       genai:
         api-key: ${GEMINI_API_KEY}
         chat:
-          model: gemini-3.1-flash   # alternatives: gemma-4-31b-it, gemini-3.8-flash
+          model: gemini-3.8-flash   # alternatives: gemma-4-31b-it, gemini-3.8-flash
           temperature: 0.7
 #        image:
 #          model: gemini-3.1-flash-lite-image
@@ -91,15 +91,15 @@ spring:
 
     ollama:
       base-url: http://localhost:11434
-#      embedding:
-#        options:
-#          model: mxbai-embed-large
-      chat:
+      embedding:
         options:
-          model: mistral:7b
-          num-ctx: 2048
-          temperature: 0.7
-          num-predict: 512
+          model: mxbai-embed-large
+#      chat:
+#        options:
+#          model: mistral:7b
+#          num-ctx: 2048
+#          temperature: 0.7
+#          num-predict: 512
 
 
 logging:
