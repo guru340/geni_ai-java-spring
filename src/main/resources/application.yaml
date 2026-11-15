@@ -7,8 +7,8 @@ app:
     provider: google-genai
   rag:
     force-rebuild: true
-    top-k: 4
-    similarity-threshold: 0.0
+    top-k: 3
+    similarity-threshold: 0.75
     chunk:
       size: 800
       min-chunk-size: 200
