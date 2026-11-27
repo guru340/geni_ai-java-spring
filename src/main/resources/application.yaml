@@ -15,7 +15,13 @@ app:
       min-chunk-to-embed: 50
       max-num-chunks: 8192
       keep-seprator: true
-
+  pdf:
+    mode: page # paragraph
+    path: file:src/main/resources/rag/qa-over-internal-docs/*.pdf
+    page-per-document: 1
+    left-alignment: true
+    number-of-top-text-lines-to-delete: 0
+    number-of-bottom-text-lines-to-delete: 0
 
 
 

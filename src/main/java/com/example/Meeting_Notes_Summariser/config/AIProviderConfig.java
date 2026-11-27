@@ -25,6 +25,7 @@ import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
@@ -32,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -74,6 +76,17 @@ public class AIProviderConfig {
                                 .build()).build(),simpleLoggerAdvisor).build();
 
 
+    }
+    @Bean("openAIAdvancedRAGChatClient")
+    ChatClient openAIAdvancedRagChatClient(GoogleGenAiChatModel googleGenAiChatModel, RetrievalAugmentationAdvisor retrievalAugmentationAdvisor){
+        return ChatClient.builder(googleGenAiChatModel)
+                .defaultAdvisors(retrievalAugmentationAdvisor).build();
+
+    }
+    @Bean
+    @Primary
+    EmbeddingModel primaryEmbedding(@Qualifier("ollamaEmbeddingModel")EmbeddingModel embeddingModel){
+        return embeddingModel;
     }
 
 //    @Bean("ollamaChatClient")
