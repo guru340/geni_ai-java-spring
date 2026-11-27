@@ -26,6 +26,9 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -84,6 +87,34 @@ public class AIProviderConfig {
 
 
 
+    }
+
+    @Bean
+    RetrievalAugmentationAdvisor ragAdvisor(@Qualifier("ragVectorStore") VectorStore vectorStore,
+                                            RagConfigData ragConfigData){
+        return RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(VectorStoreDocumentRetriever.builder()
+                        .vectorStore(vectorStore)
+                        .topK(ragConfigData.getTopK())
+                        .similarityThreshold(ragConfigData.getSimilarityThreshold())
+                        .build())
+                .queryAugmenter(ContextualQueryAugmenter.builder()
+                        .allowEmptyContext(false)
+                        .build())
+
+
+                .build();
+    }
+
+    @Bean
+    public TokenTextSplitter tokenTextSplitter(RagConfigData ragConfigData) {
+        return TokenTextSplitter.builder()
+                .withChunkSize(ragConfigData.getChunk().getSize())
+                .withMinChunkSizeChars(ragConfigData.getChunk().getMinChunkSize())
+                .withMinChunkLengthToEmbed(ragConfigData.getChunk().getMinChunkToEmbed())
+                .withMaxNumChunks(ragConfigData.getChunk().getMaxNumChunks())
+                .withKeepSeparator(ragConfigData.getChunk().isKeepSeprator())
+                .build();
     }
 
     @Bean("genAIRAGChatClient")
