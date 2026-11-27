@@ -10,20 +10,18 @@ app:
     top-k: 11
     similarity-threshold: 0.70
     chunk:
-      size: 100
+      size: 800
       min-chunk-size: 200
       min-chunk-to-embed: 50
       max-num-chunks: 8192
       keep-seprator: true
-  pdf:
-    mode: page # paragraph
-    path: file:src/main/resources/rag/qa-over-internal-docs/*.pdf
-    page-per-document: 1
-    left-alignment: true
-    number-of-top-text-lines-to-delete: 0
-    number-of-bottom-text-lines-to-delete: 0
-
-
+    pdf:                      # now nested under rag
+      mode: page # paragraph
+      path: classpath:rag/qa-over-internal-docs/*.pdf
+      page-per-document: 1   # "pages", not "page"
+      left-alignment: true
+      number-of-top-text-lines-to-delete: 0
+      number-of-bottom-text-lines-to-delete: 0
 
 
 
@@ -58,8 +56,8 @@ spring:
     vectorstore:
       pgvector:
         initialize-schema: true
-        index-type: hnsw
-        distance-type: cosine_distance
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
         dimensions: 1024
         max-document-batch-size: 10000
         table-name-for-chat-memory: vector_store

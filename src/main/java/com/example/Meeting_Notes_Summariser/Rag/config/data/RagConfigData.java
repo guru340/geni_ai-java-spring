@@ -30,7 +30,7 @@ public class RagConfigData {
     public static class PdfProperties {
         private String mode;
         private String path;
-        private int pagesPerDocument;
+        private int pagePerDocument;
         private boolean leftAlignment;
         private int numberOfTopTextLinesToDelete;
         private int numberOfBottomTextLinesToDelete;

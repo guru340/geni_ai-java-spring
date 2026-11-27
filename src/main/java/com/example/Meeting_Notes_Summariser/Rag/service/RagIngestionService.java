@@ -2,9 +2,13 @@ package com.example.Meeting_Notes_Summariser.Rag.service;
 
 import com.example.Meeting_Notes_Summariser.Rag.config.data.PgVectorStoreConfigData;
 import com.example.Meeting_Notes_Summariser.Rag.config.data.RagConfigData;
+import com.example.Meeting_Notes_Summariser.Rag.config.data.RagConstants;
 import com.example.Meeting_Notes_Summariser.Rag.exception.RagException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.ExtractedTextFormatter;
+import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.reader.pdf.ParagraphPdfDocumentReader;
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -13,10 +17,15 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.Document;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 
 @Slf4j
@@ -40,7 +49,7 @@ public class RagIngestionService {
         this.ragConfigData = ragConfigData;
         RagConfigData.PdfProperties pdfProperties=ragConfigData.getPdf();
         this.pdfDocumentReaderConfig = PdfDocumentReaderConfig.builder()
-                .withPagesPerDocument(pdfProperties.getPagesPerDocument())
+                .withPagesPerDocument(pdfProperties.getPagePerDocument())
                 .withPageExtractedTextFormatter(
                         ExtractedTextFormatter.builder()
                                 .withLeftAlignment(pdfProperties.isLeftAlignment())
@@ -111,4 +120,67 @@ public class RagIngestionService {
         return documents;
     }
 
+    private List<Document> getDocumentParts(Resource pdfResource) {
+        List<Document> parts;
+        if (RagConstants.PARAGRAPH.equalsIgnoreCase(ragConfigData.getPdf().getMode())) {
+            //Paragraph mode relies on PDF Outline/TOC; not all PDFS have it
+            parts = new ParagraphPdfDocumentReader(pdfResource, pdfDocumentReaderConfig).read();
+        } else {
+            parts = new PagePdfDocumentReader(pdfResource, pdfDocumentReaderConfig).read();
+        }
+        return parts;
+    }
+
+    private void addMetadata(Resource pdfResource, List<Document> parts) {
+        for (var part : parts) {
+            part.getMetadata().putIfAbsent(RagConstants.SOURCE, pdfResource.getFilename());
+            part.getMetadata().putIfAbsent(RagConstants.DOC_TYPE,
+                    Objects.requireNonNull(pdfResource.getFilename()).substring(0, pdfResource.getFilename().indexOf(".")));
+            part.getMetadata().putIfAbsent(RagConstants.UPDATED_AT, ZonedDateTime.now().toLocalDate().toString());
+            String checksum = sha256Hex(pdfResource);
+            part.getMetadata().put(RagConstants.CHECKSUM, checksum);
+        }
+    }
+
+
+    /**
+     * Computes the SHA-256 hex digest of the given resource via DigestInputStream.
+     */
+    private String sha256Hex(Resource resource) {
+        try {
+            final MessageDigest messageDigest = newMessageDigest("SHA-256");
+
+            try (InputStream inputStream = resource.getInputStream();
+                 DigestInputStream digestInputStream = new DigestInputStream(inputStream, messageDigest)) {
+                //Drain the stream -> DigestInputStream updated messageDigest under the hood
+                digestInputStream.transferTo(OutputStream.nullOutputStream());
+            }
+
+            return HexFormat.of().formatHex(messageDigest.digest());
+        } catch (IOException e) {
+            throw new RagException("Error creating sha256Hex for resource " + resource.getFilename(), e);
+        }
+
+    }
+
+    private MessageDigest newMessageDigest(String algorithm) {
+        try {
+            return MessageDigest.getInstance(algorithm);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RagException("Missing JCA provider for " + algorithm, e);
+        }
+    }
+
+    private void addChunkIndex(List<Document> chunks) {
+        Map<String, Integer> counters = new HashMap<>();
+        for (var chunk : chunks) {
+            var source = String.valueOf(chunk.getMetadata().getOrDefault(RagConstants.SOURCE, RagConstants.UNKNOWN));
+            var index = counters.merge(source, 1, Integer::sum) - 1;
+            chunk.getMetadata().put(RagConstants.CHUNK_INDEX, index);
+        }
+    }
+
+    private List<Document> getChunks(List<Document> documents) {
+        return tokenTextSplitter.apply(documents);
+    }
 }

@@ -1,8 +1,8 @@
 package com.example.Meeting_Notes_Summariser.Rag.controller;
 
-import com.openai.models.embeddings.EmbeddingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

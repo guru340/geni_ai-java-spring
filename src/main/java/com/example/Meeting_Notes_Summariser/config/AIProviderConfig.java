@@ -188,23 +188,23 @@ public class AIProviderConfig {
 //                .build();
 
 //    }
-    @Bean("googlegenAIChatClientWithMemory")
-    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
-        return ChatClient.builder(vertexAiGeminiChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-                        .defaultTopK(TOP_K).build())
-//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                        .build();
-    }
-    @Bean("ollamaAiChatWithMemory")
-    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
-        return ChatClient.builder(ollamaChatModel)
-                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
-                        .defaultTopK(TOP_K)
-                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
-//                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                .build();
-    }
+//    @Bean("googlegenAIChatClientWithMemory")
+//    ChatClient googlegenAIChatClientWithMemory(GoogleGenAiChatModel vertexAiGeminiChatModel,ChatMemory chatMemory,PgVectorStore vectorStore) {
+//        return ChatClient.builder(vertexAiGeminiChatModel)
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//                        .defaultTopK(TOP_K).build())
+////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//                        .build();
+//    }
+//    @Bean("ollamaAiChatWithMemory")
+//    ChatClient ollamaAiChatWithMemory(GoogleGenAiChatModel ollamaChatModel, ChatMemory chatMemory, PgVectorStore vectorStore) {
+//        return ChatClient.builder(ollamaChatModel)
+//                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(vectorStore).systemPromptTemplate(new PromptTemplate(VectorStoreMemorySystemPrompt))
+//                        .defaultTopK(TOP_K)
+//                        .order(Ordered.HIGHEST_PRECEDENCE + 200).build())
+////                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//                .build();
+//    }
 
 //    @Bean("huggingfaceChatClient")
 //    ChatClient huggingfaceChatClient(HuggingfaceChatModel huggingfaceChatModel){

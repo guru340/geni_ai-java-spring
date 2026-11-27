@@ -25,16 +25,7 @@ public class SimpleRagConfurigation {
     private static final String FILES_PATH="classpath:rag/mini-employee-handbook/files/*.md";
     private static final String   VECTOR_STORE_PATH="src/main/resources/rag/mini-employee-handbook/vectore-store/vectorstore.json";
 
-    @Bean
-    public TokenTextSplitter tokenTextSplitter(RagConfigData ragConfigData){
-        return TokenTextSplitter.builder().
-                withChunkSize(ragConfigData.getChunk().getSize())
-                .withMinChunkSizeChars(ragConfigData.getChunk().getMinChunkSize())
-                .withMinChunkLengthToEmbed(ragConfigData.getChunk().getMinChunkToEmbed())
-                .withMaxNumChunks(ragConfigData.getChunk().getMaxNumChunks())
-                .withKeepSeparator(ragConfigData.getChunk().isKeepSeprator())
-                .build();
-    }
+
 
     @Bean
     public SimpleVectorStore simpleVectorStore(@Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel,
