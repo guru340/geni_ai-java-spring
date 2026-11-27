@@ -53,11 +53,12 @@ public class AIProviderConfig {
     @Value("classpath:/templates/prompt-chat-memory-system-prompt.st")
     private Resource promptChatMemorySystemPrompt;
 
-    @Bean
-    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
+    @Bean("chatMemoryVectorStore")
+    public PgVectorStore chatMemoryVectorStore(JdbcTemplate jdbcTemplate,
                                      @Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel){
         return PgVectorStore.builder(jdbcTemplate,
                 embeddingModel)
+                .vectorTableName("vector_store")
                 .dimensions(1024).initializeSchema(true).build();
 
 
