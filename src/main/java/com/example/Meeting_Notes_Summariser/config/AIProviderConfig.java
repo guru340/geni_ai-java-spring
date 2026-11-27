@@ -1,29 +1,21 @@
 package com.example.Meeting_Notes_Summariser.config;
 
+import com.example.Meeting_Notes_Summariser.Rag.config.data.PgVectorStoreConfigData;
 import com.example.Meeting_Notes_Summariser.Rag.config.data.RagConfigData;
-import com.example.Meeting_Notes_Summariser.advisor.errorWrappingAdvisor;
-import com.example.Meeting_Notes_Summariser.advisor.systemPromptAdvisor;
-import com.example.Meeting_Notes_Summariser.advisor.ValidationAdvisor;
-import com.google.genai.Client;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.chat.prompt.PromptTemplateChatActions;
 import org.springframework.ai.embedding.EmbeddingModel;
 
 
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.google.genai.GoogleGenAiChatModel;
-import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
-import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.ai.openai.OpenAiChatModel;
 
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
@@ -44,7 +36,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 import java.util.List;
-import java.util.UUID;
 
 @Configuration
 public class AIProviderConfig {

@@ -1,4 +1,4 @@
-package com.example.Meeting_Notes_Summariser.config;
+package com.example.Meeting_Notes_Summariser.Rag.config.data;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
