@@ -70,6 +70,22 @@ public class AIProviderConfig {
 
     }
 
+    @Bean("ragVectorStore")
+    public VectorStore ragVectorStore(JdbcTemplate jdbcTemplate,
+                                             @Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel, PgVectorStoreConfigData pgVectorStoreConfigData){
+        return PgVectorStore.builder(jdbcTemplate,
+                        embeddingModel)
+                .vectorTableName(pgVectorStoreConfigData.getTableNameForRag())
+                .dimensions(pgVectorStoreConfigData.getDimensions()).initializeSchema(pgVectorStoreConfigData.isInitializeSchema())
+                .distanceType(PgVectorStore.PgDistanceType.valueOf(pgVectorStoreConfigData.getDistanceType()))
+                .indexType(PgVectorStore.PgIndexType.valueOf(pgVectorStoreConfigData.getIndexType()))
+                .maxDocumentBatchSize(pgVectorStoreConfigData.getMaxDocumentBatchSize())
+                .build();
+
+
+
+    }
+
     @Bean("genAIRAGChatClient")
     ChatClient genAIRAGChatClient(GoogleGenAiChatModel googleGenAiChatModel,
                                   SimpleVectorStore simpleVectorStore,
