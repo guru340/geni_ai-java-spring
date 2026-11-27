@@ -76,10 +76,32 @@
             <version>2.0.0-M8</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--        RAG-->
+        <!--        Jdbc AutoConfig (for Datasource & HikariCP-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!--RAG advisior & modules (for RetreivalArgumentation        -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-rag</artifactId>
+        </dependency>
+
+        <!--Document Reader & Spiltters(For PDF page/paragraph readers, formatters)-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-pdf-document-reader</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-google-genai-image</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -107,7 +129,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
+
 		</dependency>
+
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
