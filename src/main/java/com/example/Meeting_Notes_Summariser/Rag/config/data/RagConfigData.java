@@ -13,10 +13,11 @@ public class RagConfigData {
     private int topK;
     private double similarityThreshold;
     private ChunkProperties chunk;
+    private PdfProperties pdf;
 
 
     @Data
-    public static class ChunkProperties{
+    public static class ChunkProperties  {
         private int size;
         private int minChunkSize;
         private int minChunkToEmbed;
