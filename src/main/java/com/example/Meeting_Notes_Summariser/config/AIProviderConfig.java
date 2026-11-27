@@ -28,6 +28,7 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,12 +55,16 @@ public class AIProviderConfig {
     private Resource promptChatMemorySystemPrompt;
 
     @Bean("chatMemoryVectorStore")
-    public PgVectorStore chatMemoryVectorStore(JdbcTemplate jdbcTemplate,
-                                     @Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel){
+    public VectorStore chatMemoryVectorStore(JdbcTemplate jdbcTemplate,
+                                             @Qualifier("ollamaEmbeddingModel") EmbeddingModel embeddingModel, PgVectorStoreConfigData pgVectorStoreConfigData){
         return PgVectorStore.builder(jdbcTemplate,
                 embeddingModel)
-                .vectorTableName("vector_store")
-                .dimensions(1024).initializeSchema(true).build();
+                .vectorTableName(pgVectorStoreConfigData.getTableNameForChatMemory())
+                .dimensions(pgVectorStoreConfigData.getDimensions()).initializeSchema(pgVectorStoreConfigData.isInitializeSchema())
+                .distanceType(PgVectorStore.PgDistanceType.valueOf(pgVectorStoreConfigData.getDistanceType()))
+                .indexType(PgVectorStore.PgIndexType.valueOf(pgVectorStoreConfigData.getIndexType()))
+                .maxDocumentBatchSize(pgVectorStoreConfigData.getMaxDocumentBatchSize())
+                .build();
 
 
 

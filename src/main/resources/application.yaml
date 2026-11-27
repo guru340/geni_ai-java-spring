@@ -62,6 +62,8 @@ spring:
         distance-type: cosine_distance
         dimensions: 1024
         max-document-batch-size: 10000
+        table-name-for-chat-memory: vector_store
+        table-name-for-rag: rag_vector_store
 
     openai:
       api-key: ${GROQ_API_KEY}
