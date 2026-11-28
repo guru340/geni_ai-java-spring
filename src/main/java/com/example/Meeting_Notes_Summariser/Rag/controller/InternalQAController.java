@@ -35,6 +35,7 @@ public class InternalQAController {
         if (filter != null && !filter.isBlank()) {
             prompt = prompt.advisors(a -> a.param(VectorStoreDocumentRetriever.FILTER_EXPRESSION, filter));
         }
+        //
 
         return prompt.call().content();
     }
