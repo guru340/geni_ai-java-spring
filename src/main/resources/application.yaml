@@ -10,7 +10,7 @@ app:
     top-k: 11
     similarity-threshold: 0.70
     chunk:
-      size: 800
+      size: 300
       min-chunk-size: 200
       min-chunk-to-embed: 50
       max-num-chunks: 8192
